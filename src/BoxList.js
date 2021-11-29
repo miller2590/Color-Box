@@ -5,20 +5,39 @@ import NewBoxForm from "./NewBoxForm";
 class BoxList extends Component {
   constructor(props) {
     super(props);
-    this.state = {boxes: [{width: 20, height: 40, color: 'red'}]};
+    this.state = { boxes: [] };
+    this.create = this.create.bind(this);
+    this.remove = this.remove.bind(this);
+  }
+
+  //Takes a newBox value from handle Submit in new box form and
+  //sets state of boxes in boxlist
+  create(newBox) {
+    this.setState({
+      boxes: [...this.state.boxes, newBox],
+    });
+  }
+
+  remove(id) {
+    this.setState({
+      boxes: this.state.boxes.filter((box) => box.id !== id),
+    });
   }
 
   render() {
-      const boxes = this.state.boxes.map(box => (
-          <Box 
-          width={box.width}
-          height={box.height}
-          color={box.color}
-          />
-      ))
+    const boxes = this.state.boxes.map((box) => (
+      <Box
+        key={box.id}
+        id={box.id}
+        width={box.width}
+        height={box.height}
+        color={box.color}
+        removeBox={this.remove}
+      />
+    ));
     return (
       <div>
-        <NewBoxForm />
+        <NewBoxForm create={this.create} />
         {boxes}
       </div>
     );
